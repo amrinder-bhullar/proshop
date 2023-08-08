@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLogoutApiCallMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import { toast } from "react-toastify";
-import SearchBox from "./searchBox";
+import SearchBox from "./SearchBox";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
