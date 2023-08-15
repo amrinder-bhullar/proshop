@@ -10,6 +10,7 @@ import {
 } from "../../slices/productsApiSlice";
 import { toast } from "react-toastify";
 import FormContainer from "../../components/FormContainer";
+import ReactQuill from "react-quill";
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
@@ -167,6 +168,11 @@ const ProductEditScreen = () => {
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
+            <ReactQuill
+              theme="snow"
+              value={description}
+              onChange={setDescription}
+            />
             {isLoading && <Loader />}
             <Button type="submit" variant="primary" className="mt-3">
               Update Product

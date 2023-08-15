@@ -42,22 +42,14 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               <SearchBox />
-              <LinkContainer to={"/cart"}>
-                <Nav.Link>
-                  <FaShoppingCart />
-                  Cart
-                  {itemsInCart > 0 && (
-                    <Badge pill bg="success" style={{ marginLeft: "5px" }}>
-                      {" "}
-                      {itemsInCart}
-                    </Badge>
-                  )}
-                </Nav.Link>
-              </LinkContainer>
+
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
                   <LinkContainer to={"/profile"}>
                     <NavDropdown.Item>Profile</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to={"/myorders"}>
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
@@ -82,8 +74,25 @@ const Header = () => {
                   <LinkContainer to={"/admin/userlist"}>
                     <NavDropdown.Item>Users</NavDropdown.Item>
                   </LinkContainer>
+                  <LinkContainer to={"/admin/settings/slider"}>
+                    <NavDropdown.Item>Settings</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to={"/admin/pages"}>
+                    <NavDropdown.Item>Pages</NavDropdown.Item>
+                  </LinkContainer>
                 </NavDropdown>
               )}
+              <LinkContainer to={"/cart"}>
+                <Nav.Link>
+                  <FaShoppingCart />
+                  {itemsInCart > 0 && (
+                    <Badge pill bg="success" style={{ marginLeft: "5px" }}>
+                      {" "}
+                      {itemsInCart}
+                    </Badge>
+                  )}
+                </Nav.Link>
+              </LinkContainer>
             </Nav>
           </Navbar.Collapse>
         </Container>

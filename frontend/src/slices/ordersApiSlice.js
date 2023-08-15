@@ -48,6 +48,11 @@ export const ordersApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
       }),
     }),
+    getInvoiceById: builder.query({
+      query: (orderId) => ({
+        url: `${ORDERS_URL}/${orderId}/invoice`,
+      }),
+    }),
   }),
 });
 
@@ -59,4 +64,5 @@ export const {
   useGetMyOrdersQuery,
   useGetOrdersQuery,
   useDeliverOrderMutation,
+  useGetInvoiceByIdQuery,
 } = ordersApiSlice;

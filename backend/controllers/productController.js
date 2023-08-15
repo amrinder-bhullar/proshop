@@ -137,11 +137,14 @@ const createProductReview = asyncHandler(async (req, res) => {
 });
 
 // @desc Get top rated products
-// @route GET /api/products/top
+// @route GET /api/products/top/:id
 // @access Public
 
 const getTopProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+  const excludeProduct = req.params.id; // exclude this id when looking from top products
+  const products = await Product.find({ _id: { $ne: excludeProduct } })
+    .sort({ rating: -1 })
+    .limit(4);
   res.status(200).json(products);
 });
 

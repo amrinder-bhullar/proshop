@@ -1,6 +1,8 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Order from "../models/orderModel.js";
 import User from "../models/userModel.js";
+import { runPdfGenrate } from "../utils/generatePdf.js";
+import { orderCreatedNotification } from "../utils/sendNotificationEmail.js";
 
 // @desc create new Order
 // route POST /api/orders
@@ -36,6 +38,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       totalPrice,
     });
     const orderCreated = await order.save();
+    orderCreatedNotification(orderCreated);
     res.status(200).json(orderCreated);
   }
 });
@@ -123,6 +126,35 @@ const getOrders = asyncHandler(async (req, res) => {
   res.status(200).json(orders);
 });
 
+// @desc generate PDF invoice from an order
+// route GET /api/orders/:id/invoice
+//@access Private
+
+const getInvoiceById = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "id name email"
+  );
+  if (order) {
+    const pdf = await runPdfGenrate(order);
+    order.invoice.generated = true;
+    order.invoice.url = `/invoices/${order._id}.pdf`;
+    await order.save();
+
+    // Set response headers
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${order._id}.pdf"`
+    );
+
+    res.status(200).send(pdf);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
 export {
   addOrderItems,
   getMyOrders,
@@ -130,4 +162,5 @@ export {
   updateOrderToPaid,
   updateOrderToDelivered,
   getOrders,
+  getInvoiceById,
 };

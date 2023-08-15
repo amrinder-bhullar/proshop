@@ -7,6 +7,7 @@ import {
   getUsers,
   logoutUser,
   registerUser,
+  subscribeToNewsletter,
   updateUser,
   updateUserProfile,
 } from "../controllers/userController.js";
@@ -30,5 +31,6 @@ router
   .get(protect, checkAdmin, getUserById)
   .put(protect, checkAdmin, updateUser)
   .delete(protect, checkAdmin, deleteUser);
+router.route("/newsletter").post(subscribeToNewsletter);
 
 export default router;

@@ -11,6 +11,7 @@ import {
   FormGroup,
   FormLabel,
   FormControl,
+  Breadcrumb,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Rating from "../components/Rating";
@@ -25,6 +26,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../slices/cartSlice";
 import { toast } from "react-toastify";
 import Meta from "../components/Meta";
+import ProductTabs from "../components/productScreen/ProductTabs";
+import ProductReviews from "../components/productScreen/ProductReviews";
+import SuggestedProducts from "../components/SuggestedProducts";
 
 const productScreen = () => {
   const { id: productId } = useParams();
@@ -72,9 +76,6 @@ const productScreen = () => {
 
   return (
     <>
-      <Button className="btn btn-light my-3" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
       {loading ? (
         <Loader />
       ) : error ? (
@@ -83,6 +84,12 @@ const productScreen = () => {
         </Message>
       ) : (
         <>
+          <Breadcrumb className="my-3">
+            <Breadcrumb.Item>
+              <Link to={"/"}>Home</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item active>{product.name}</Breadcrumb.Item>
+          </Breadcrumb>
           <Meta title={product.name} />
           <Row>
             <Col md={5}>
@@ -97,9 +104,6 @@ const productScreen = () => {
                   <Rating value={product.rating} text={product.numReviews} />
                 </ListGroupItem>
                 <ListGroupItem>Price: ${product.price}</ListGroupItem>
-                <ListGroupItem>
-                  Description: {product.description}
-                </ListGroupItem>
               </ListGroup>
             </Col>
             <Col md={3}>
@@ -159,72 +163,15 @@ const productScreen = () => {
               </Card>
             </Col>
           </Row>
-          <Row className="review">
-            <Col md={6}>
-              <h2>Reviews</h2>
-              {product.reviews.length === 0 && <Message>No Reviews</Message>}
-              <ListGroup variant="flush">
-                {product.reviews.map((review) => (
-                  <ListGroupItem key={review._id}>
-                    <strong>{review.name}</strong>
-                    <Rating value={review.rating} />
-                    <p>{review.createdAt}</p>
-                    <p>{review.comment}</p>
-                  </ListGroupItem>
-                ))}
-                <ListGroupItem>
-                  <h2>Write a Customer review</h2>
-                  {loadingCreateReview && <Loader />}
-
-                  {userInfo ? (
-                    <Form onSubmit={submitHandler}>
-                      <FormGroup controlId="rating" className="my-2">
-                        <FormLabel>Rating</FormLabel>
-                        <FormControl
-                          as="select"
-                          value={rating}
-                          onChange={(e) => setRating(Number(e.target.value))}
-                        >
-                          <option value={""}>Select...</option>
-                          <option value={"1"}>1 - Poor</option>
-                          <option value={"2"}>2 - Fair</option>
-                          <option value={"3"}>3 - Good</option>
-                          <option value={"4"}>4 - Very Good</option>
-                          <option value={"5"}>5 - Excellent</option>
-                        </FormControl>
-                      </FormGroup>
-                      <FormGroup controlId="comment" className="my-2">
-                        <FormLabel>Comment</FormLabel>
-                        <FormControl
-                          as="textarea"
-                          rows={3}
-                          value={comment}
-                          onChange={(e) => setComment(e.target.value)}
-                        ></FormControl>
-                        <Button
-                          type="submit"
-                          disabled={loadingCreateReview}
-                          variant="primary"
-                        >
-                          Submit review
-                        </Button>
-                      </FormGroup>
-                    </Form>
-                  ) : (
-                    <Message>
-                      Please{" "}
-                      {
-                        <Link to={`/login?redirect=/product/${productId}`}>
-                          login
-                        </Link>
-                      }{" "}
-                      to review the product
-                    </Message>
-                  )}
-                </ListGroupItem>
-              </ListGroup>
-            </Col>
+          <Row className="mt-3">
+            <ProductTabs
+              product={product}
+              userInfo={userInfo}
+              productId={productId}
+              refetch={refetch}
+            />
           </Row>
+          <SuggestedProducts />
         </>
       )}
     </>

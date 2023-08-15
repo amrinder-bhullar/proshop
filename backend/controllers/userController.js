@@ -1,6 +1,8 @@
 import User from "../models/userModel.js";
 import asyncHandler from "../middleware/asyncHandler.js";
 import generateToken from "../utils/generateToken.js";
+import { registeredUserNotification } from "../utils/sendNotificationEmail.js";
+import { subscribeUser } from "../utils/mailchimpSubscriber.js";
 
 //@desc Auth user/set token
 //@route POST /api/users/auth
@@ -44,6 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     generateToken(res, user._id);
+    registeredUserNotification(user);
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -175,6 +178,20 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+//@desc subscribes user to news letter
+//@route POST /api/users/newsletter
+//@access Public
+const subscribeToNewsletter = asyncHandler(async (req, res) => {
+  const email = req.body.email;
+  const userSubscribed = await subscribeUser(email);
+  if (userSubscribed) {
+    res.status(201).json({ message: "Thank you for subscribing" });
+  } else {
+    res.status(400);
+    throw new Error("Something went wrong");
+  }
+});
+
 export {
   authUser,
   registerUser,
@@ -185,4 +202,5 @@ export {
   getUserById,
   updateUser,
   deleteUser,
+  subscribeToNewsletter,
 };

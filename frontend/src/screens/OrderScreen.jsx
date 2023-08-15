@@ -15,6 +15,7 @@ import {
   useGetPayPalClientIdQuery,
   usePayOrderMutation,
   useDeliverOrderMutation,
+  useGetInvoiceByIdQuery,
 } from "../slices/ordersApiSlice";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { toast } from "react-toastify";
@@ -23,6 +24,7 @@ import { useEffect } from "react";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
+  const dispatch = useDispatch();
 
   const {
     data: order,
@@ -106,6 +108,35 @@ const OrderScreen = () => {
       toast.success("Order Delivered");
     } catch (err) {
       toast.error(err?.data?.message || err.message);
+    }
+  };
+
+  const pdfDowndloadHandler = async () => {
+    try {
+      let pdf;
+      if (order.invoice.generated) {
+        pdf = await fetch(order.invoice.url);
+      } else {
+        pdf = await fetch(`/api/orders/${orderId}/invoice`);
+      }
+      const blob = await pdf.blob();
+      // Create a download link
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${orderId}.pdf`;
+      document.body.appendChild(link);
+      console.log(url);
+      console.log(link);
+      link.click();
+
+      // Clean up
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      // toast.success("Invoice downloaded");
+      refetch();
+    } catch (error) {
+      console.error("Error downloading file:", error);
     }
   };
 
@@ -240,6 +271,18 @@ const OrderScreen = () => {
                     </Button>
                   </ListGroupItem>
                 )}
+              {userInfo && !userInfo.isAdmin && order.isDelivered && (
+                <ListGroupItem>
+                  <Button
+                    type="button"
+                    onClick={pdfDowndloadHandler}
+                    // href={`/api/orders/${orderId}/invoice`}
+                    className="btn btn-block"
+                  >
+                    Download invoice
+                  </Button>
+                </ListGroupItem>
+              )}
             </ListGroup>
           </Card>
         </Col>

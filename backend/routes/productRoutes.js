@@ -14,7 +14,7 @@ const router = express.Router();
 // route: /api/products
 
 router.route("/").get(getProducts).post(protect, checkAdmin, createProduct);
-router.route("/top").get(getTopProducts);
+router.route("/top/:id").get(getTopProducts);
 
 router
   .route("/:id")

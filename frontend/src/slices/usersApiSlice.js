@@ -59,6 +59,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+    subscribeToNewsletter: builder.mutation({
+      query: (subscribingUser) => ({
+        url: `${USERS_URL}/newsletter`,
+        method: "POST",
+        body: subscribingUser,
+      }),
+    }),
   }),
 });
 
@@ -71,4 +78,5 @@ export const {
   useDeleteUserMutation,
   useUpdateUserMutation,
   useGetUserDetailsQuery,
+  useSubscribeToNewsletterMutation,
 } = usersApiSlice;

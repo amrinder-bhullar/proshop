@@ -72,6 +72,15 @@ const orderSchema = new mongoose.Schema(
     deliveredAt: {
       type: Date,
     },
+    invoice: {
+      generated: {
+        type: Boolean,
+        default: false,
+      },
+      url: {
+        type: String,
+      },
+    },
   },
   { timestamps: true }
 );
