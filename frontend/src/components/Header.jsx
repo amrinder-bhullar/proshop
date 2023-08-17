@@ -7,6 +7,7 @@ import { useLogoutApiCallMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import SearchBox from "./SearchBox";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const { cartItems } = useSelector((state) => state.cart);
@@ -64,23 +65,28 @@ const Header = () => {
                 </LinkContainer>
               )}
               {userInfo && userInfo.isAdmin && (
-                <NavDropdown title="Admin" id="adminmenu">
-                  <LinkContainer to={"/admin/orderlist"}>
-                    <NavDropdown.Item>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to={"/admin/productlist"}>
-                    <NavDropdown.Item>Products</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to={"/admin/userlist"}>
-                    <NavDropdown.Item>Users</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to={"/admin/settings/slider"}>
-                    <NavDropdown.Item>Settings</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to={"/admin/pages"}>
-                    <NavDropdown.Item>Pages</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
+                // <NavDropdown title="Admin" id="adminmenu">
+                //   <LinkContainer to={"/admin/orderlist"}>
+                //     <NavDropdown.Item>Orders</NavDropdown.Item>
+                //   </LinkContainer>
+                //   <LinkContainer to={"/admin/productlist"}>
+                //     <NavDropdown.Item>Products</NavDropdown.Item>
+                //   </LinkContainer>
+                //   <LinkContainer to={"/admin/userlist"}>
+                //     <NavDropdown.Item>Users</NavDropdown.Item>
+                //   </LinkContainer>
+                //   <LinkContainer to={"/admin/settings/slider"}>
+                //     <NavDropdown.Item>Settings</NavDropdown.Item>
+                //   </LinkContainer>
+                //   <LinkContainer to={"/admin/pages"}>
+                //     <NavDropdown.Item>Pages</NavDropdown.Item>
+                //   </LinkContainer>
+                // </NavDropdown>
+                <LinkContainer to={"/admin/orderlist"}>
+                  <Nav.Link>
+                    <FaUser /> Admin
+                  </Nav.Link>
+                </LinkContainer>
               )}
               <LinkContainer to={"/cart"}>
                 <Nav.Link>

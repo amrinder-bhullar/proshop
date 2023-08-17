@@ -94,20 +94,6 @@ const PageEditScreen = () => {
                   onChange={(e) => setTitle(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group
-                className="my-2"
-                controlId="url"
-                style={{ height: "300px" }}
-              >
-                <Form.Label>Content</Form.Label>
-                <Form.Control
-                  as={"textarea"}
-                  placeholder="enter content"
-                  value={content}
-                  rows="10"
-                  onChange={(e) => setContent(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
               <div style={{ height: "300px" }}>
                 <ReactQuill
                   style={{ height: "250px" }}

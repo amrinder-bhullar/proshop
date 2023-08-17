@@ -4,7 +4,7 @@ import { FaMoneyBill, FaUser } from "react-icons/fa";
 import { LinkContainer } from "react-router-bootstrap";
 import { Outlet } from "react-router-dom";
 
-const UserSideMenu = () => {
+const AdminSideMenu = () => {
   return (
     <>
       <Container xs={12} md={2}>
@@ -18,17 +18,20 @@ const UserSideMenu = () => {
               collapseOnSelect
             >
               <Nav className="mx-auto" md={12}>
-                <LinkContainer to={"/profile"}>
-                  <Nav.Link>
-                    <FaUser />
-                    Profile
-                  </Nav.Link>
+                <LinkContainer to={"/admin/orderlist"}>
+                  <Nav.Link>Orders</Nav.Link>
                 </LinkContainer>
-                <LinkContainer to={"/myorders"}>
-                  <Nav.Link>
-                    <FaMoneyBill />
-                    Orders
-                  </Nav.Link>
+                <LinkContainer to={"/admin/productlist"}>
+                  <Nav.Link>Products</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to={"/admin/userlist"}>
+                  <Nav.Link>Users</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to={"/admin/pages"}>
+                  <Nav.Link>Pages</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to={"/admin/settings/slider"}>
+                  <Nav.Link>Settings</Nav.Link>
                 </LinkContainer>
               </Nav>
             </Navbar>
@@ -42,4 +45,4 @@ const UserSideMenu = () => {
   );
 };
 
-export default UserSideMenu;
+export default AdminSideMenu;

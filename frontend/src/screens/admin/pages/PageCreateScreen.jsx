@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import FormContainer from "../../../components/FormContainer";
 import { useAddPageMutation } from "../../../slices/pagesApiSlice";
 import ReactQuill from "react-quill";
+import SlugInput from "../../../components/Admin/SlugInput";
 
 const PageCreateScreen = () => {
   const [title, setTitle] = useState("");
@@ -15,19 +16,19 @@ const PageCreateScreen = () => {
   const [image, setImage] = useState("");
   const [content, setContent] = useState("");
   const [display, setDisplay] = useState(true);
-  const [slugEdit, setSlugEdit] = useState(false);
+  // const [slugEdit, setSlugEdit] = useState(false);
 
   const quillRef = useRef();
 
-  useEffect(() => {
-    const slug = title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]/g, "-")
-      .replace(/^-+|-+$/g, "");
-    setUrl(slug);
-  }, [title]);
+  // useEffect(() => {
+  //   const slug = title
+  //     .toLowerCase()
+  //     .trim()
+  //     .replace(/[^\w\s-]/g, "")
+  //     .replace(/[\s_-]/g, "-")
+  //     .replace(/^-+|-+$/g, "");
+  //   setUrl(slug);
+  // }, [title]);
 
   const handleInsertImage = () => {
     const imageUrl = prompt("Enter the image URL");
@@ -107,23 +108,7 @@ const PageCreateScreen = () => {
               onChange={(e) => setTitle(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          <Form.Group className="my-2" controlId="slug">
-            <Form.Label>
-              Url: /pages/{" "}
-              <span
-                style={{ color: "blue", textDecoration: "underline" }}
-                onClick={() => setSlugEdit(!slugEdit)}
-              >
-                {slugEdit ? "done" : "edit"}
-              </span>
-            </Form.Label>
-            <Form.Control
-              type="text"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              disabled={!slugEdit}
-            ></Form.Control>
-          </Form.Group>
+          <SlugInput title={title} setUrl={setUrl} url={url} />
           <Form.Group className="my-2" controlId="image">
             <Form.Label>Image</Form.Label>
             <Form.Control
