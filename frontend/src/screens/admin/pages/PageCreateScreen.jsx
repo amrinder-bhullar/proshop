@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Table, Button, Image, Row, Col, Form } from "react-bootstrap";
 import Message from "../../../components/Message";
@@ -9,23 +9,54 @@ import FormContainer from "../../../components/FormContainer";
 import { useAddPageMutation } from "../../../slices/pagesApiSlice";
 import ReactQuill from "react-quill";
 
-const modules = {
-  toolbar: {
-    container: [
-      [{ header: "1" }, { header: "2" }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-      ["clean"],
-    ],
-  },
-};
-
 const PageCreateScreen = () => {
   const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
   const [image, setImage] = useState("");
   const [content, setContent] = useState("");
   const [display, setDisplay] = useState(true);
+  const [slugEdit, setSlugEdit] = useState(false);
+
+  const quillRef = useRef();
+
+  useEffect(() => {
+    const slug = title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]/g, "-")
+      .replace(/^-+|-+$/g, "");
+    setUrl(slug);
+  }, [title]);
+
+  const handleInsertImage = () => {
+    const imageUrl = prompt("Enter the image URL");
+
+    if (imageUrl) {
+      const quill = quillRef.current.getEditor();
+      const range = quill.getSelection();
+      if (range) {
+        const altText = "Image description"; // Change this as needed
+        const imageTag = `<img src="${imageUrl}" alt="${altText}">`;
+        quill.clipboard.dangerouslyPasteHTML(range.index, imageTag);
+      }
+    }
+  };
+
+  const modules = {
+    toolbar: {
+      container: [
+        [{ header: "1" }, { header: "2" }],
+        ["bold", "italic", "underline", "strike", "blockquote"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ image: "insert" }],
+        ["clean"],
+      ],
+      handlers: {
+        image: handleInsertImage,
+      },
+    },
+  };
 
   const [createPage, { isLoading: loadingCreatePage }] = useAddPageMutation();
 
@@ -37,7 +68,7 @@ const PageCreateScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const result = await createPage({ title, image, content, display });
+    const result = await createPage({ title, image, content, display, url });
     if (result.error) {
       toast.error(result.error);
     } else {
@@ -76,9 +107,27 @@ const PageCreateScreen = () => {
               onChange={(e) => setTitle(e.target.value)}
             ></Form.Control>
           </Form.Group>
+          <Form.Group className="my-2" controlId="slug">
+            <Form.Label>
+              Url: /pages/{" "}
+              <span
+                style={{ color: "blue", textDecoration: "underline" }}
+                onClick={() => setSlugEdit(!slugEdit)}
+              >
+                {slugEdit ? "done" : "edit"}
+              </span>
+            </Form.Label>
+            <Form.Control
+              type="text"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              disabled={!slugEdit}
+            ></Form.Control>
+          </Form.Group>
           <Form.Group className="my-2" controlId="image">
             <Form.Label>Image</Form.Label>
             <Form.Control
+              ref={quillRef}
               type="text"
               placeholder="upload image"
               value={image}

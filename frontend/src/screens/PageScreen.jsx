@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetPageByIdQuery } from "../slices/pagesApiSlice";
+import { useGetPageByUrlQuery } from "../slices/pagesApiSlice";
 import { Row } from "react-bootstrap";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
 
 const PageScreen = () => {
-  const { id } = useParams();
-  const { data: page, isLoading: loading, error } = useGetPageByIdQuery(id);
+  const { url } = useParams();
+  const { data: page, isLoading: loading, error } = useGetPageByUrlQuery(url);
   return (
     <>
       {loading ? (

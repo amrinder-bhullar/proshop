@@ -52,7 +52,7 @@ const router = createBrowserRouter(
         element={<HomeScreen />}
       />
       <Route path="/product/:id" element={<ProductScreen />} />
-      <Route path="/pages/:id" element={<PageScreen />} />
+      <Route path="/pages/:url" element={<PageScreen />} />
       <Route path="/cart" element={<CartScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />

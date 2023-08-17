@@ -40,7 +40,7 @@ const Footer = () => {
             <Col>
               <Link
                 className="text-decoration-none d-block"
-                to={"/pages/64db548d68b887e7ccff8044"}
+                to={"/pages/our-story"}
               >
                 Our Story
               </Link>

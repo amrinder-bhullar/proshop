@@ -61,7 +61,7 @@ const PageListScreen = () => {
                     />
                   </td>
                   <td>
-                    <LinkContainer to={`/pages/${page._id}`}>
+                    <LinkContainer to={`/pages/${page.url}`}>
                       <Button className="btn-sm" variant="light">
                         <FaEye />
                       </Button>

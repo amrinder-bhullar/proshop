@@ -3,6 +3,10 @@ import mongoose from "mongoose";
 const pagesSchema = new mongoose.Schema(
   {
     title: String,
+    url: {
+      type: String,
+      unique: true,
+    },
     content: {
       type: String,
     },

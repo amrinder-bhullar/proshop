@@ -16,6 +16,13 @@ export const pagesApiSlice = apiSlice.injectEndpoints({
       providesTags: ["Page"],
       keepUnusedDataFor: 5,
     }),
+    getPageByUrl: builder.query({
+      query: (url) => ({
+        url: `${PAGES_URL}/url/${url}`,
+      }),
+      providesTags: ["Page"],
+      keepUnusedDataFor: 5,
+    }),
     addPage: builder.mutation({
       query: (data) => ({
         url: PAGES_URL,
@@ -40,4 +47,5 @@ export const {
   useAddPageMutation,
   useGetPageByIdQuery,
   useUpdatePageMutation,
+  useGetPageByUrlQuery,
 } = pagesApiSlice;
