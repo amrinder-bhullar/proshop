@@ -30,6 +30,12 @@ const UserSideMenu = () => {
                     Orders
                   </Nav.Link>
                 </LinkContainer>
+                <LinkContainer to={"/support/chat"}>
+                  <Nav.Link>
+                    <FaMoneyBill />
+                    Support & chat
+                  </Nav.Link>
+                </LinkContainer>
               </Nav>
             </Navbar>
           </Col>

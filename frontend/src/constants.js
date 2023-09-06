@@ -6,3 +6,4 @@ export const PAYPAL_URL = "/api/config/paypal";
 export const UPLOADS_URL = "/api/upload";
 export const SETTINGS_URL = "/api/settings";
 export const PAGES_URL = "/api/pages";
+export const CHAT_URL = "/api/chat";

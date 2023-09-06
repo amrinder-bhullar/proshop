@@ -30,6 +30,9 @@ const AdminSideMenu = () => {
                 <LinkContainer to={"/admin/pages"}>
                   <Nav.Link>Pages</Nav.Link>
                 </LinkContainer>
+                <LinkContainer to={"/admin/support/chat"}>
+                  <Nav.Link>Support & Chat</Nav.Link>
+                </LinkContainer>
                 <LinkContainer to={"/admin/settings/slider"}>
                   <Nav.Link>Settings</Nav.Link>
                 </LinkContainer>

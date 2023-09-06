@@ -24,7 +24,7 @@ const Header = () => {
       await logoutApiCall().unwrap();
       dispatch(logout());
       toast.success("logged out successfully");
-    } catch (error) {
+    } catch (err) {
       toast.error(err?.data?.message || err.error);
       console.log(err.error);
     }

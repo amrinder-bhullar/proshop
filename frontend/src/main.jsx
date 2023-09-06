@@ -40,6 +40,9 @@ import PageListScreen from "./screens/admin/pages/PageListScreen.jsx";
 import PageCreateScreen from "./screens/admin/pages/PageCreateScreen.jsx";
 import PageScreen from "./screens/PageScreen.jsx";
 import PageEditScreen from "./screens/admin/pages/PageEditScreen.jsx";
+import UserChatScreen from "./screens/user/UserChatScreen.jsx";
+import UserChatScreenById from "./screens/user/UserChatScreenById.jsx";
+import AdminChatScreen from "./screens/admin/chat/AdminChatScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -60,6 +63,8 @@ const router = createBrowserRouter(
         <Route path="" element={<UserSideMenu />}>
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/myorders" element={<UserOrdersScreen />} />
+          <Route path="/support/chat" element={<UserChatScreen />} />
+          <Route path="/support/chat/:id" element={<UserChatScreenById />} />
         </Route>
         <Route path="/shipping" element={<ShippingScreen />} />
         <Route path="/payment" element={<PaymentScreen />} />
@@ -85,19 +90,20 @@ const router = createBrowserRouter(
         <Route path="admin/pages" element={<PageListScreen />} />
         <Route path="admin/pages/create" element={<PageCreateScreen />} />
         <Route path="admin/page/:id/edit" element={<PageEditScreen />} />
+        <Route path="admin/support/chat" element={<AdminChatScreen />} />
       </Route>
     </Route>
   )
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <HelmetProvider>
-      <Provider store={store}>
-        <PayPalScriptProvider deferLoading={true}>
-          <RouterProvider router={router} />
-        </PayPalScriptProvider>
-      </Provider>
-    </HelmetProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <HelmetProvider>
+    <Provider store={store}>
+      <PayPalScriptProvider deferLoading={true}>
+        <RouterProvider router={router} />
+      </PayPalScriptProvider>
+    </Provider>
+  </HelmetProvider>
+  // </React.StrictMode>
 );

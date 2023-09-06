@@ -9,14 +9,19 @@ import orderRoutes from "./routes/orderRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import pageRoutes from "./routes/pageRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import { errorHandler, notFound } from "./middleware/errorMidddleware.js";
 import cookieParser from "cookie-parser";
 import { protect } from "./middleware/authMiddleware.js";
+import http from "http";
+import runSocketIO from "./utils/socket.js";
 
 connectDB(); //Connect to MongoDB
 
 const port = process.env.PORT || 5000;
 const app = express();
+const server = http.createServer(app);
+runSocketIO(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,6 +33,7 @@ app.use("/api/orders", orderRoutes); // send the requests to /api/orders to orde
 app.use("/api/upload", uploadRoutes); // handles the file uploads for product image
 app.use("/api/settings", settingRoutes); // handles the settings of the store
 app.use("/api/pages", pageRoutes); // handles the pages
+app.use("/api/chat", chatRoutes); // handles the chats
 
 // we cannot store paypal Client it in frontend code so when we need it we can call this api endpoint which will return the client ID
 app.get("/api/config/paypal", (req, res) =>
@@ -57,6 +63,6 @@ if (process.env.NODE_ENV === "production") {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("http://localhost:5000");
 });
