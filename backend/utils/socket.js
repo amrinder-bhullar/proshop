@@ -9,6 +9,8 @@ const runSocketIO = (server) => {
   io.on("connection", (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
     const session = {};
+    let currentChat;
+    let currentChatId;
 
     socket.on("isAdmin", async (userID) => {
       const user = await User.findById(userID);
@@ -19,22 +21,29 @@ const runSocketIO = (server) => {
     });
 
     socket.on("chat", async (chatId) => {
-      session.currentChat = await Chat.findById(chatId).populate("user");
-      socket.join(session.currentChat._id);
-      socket.emit("loadChat", session.currentChat);
+      currentChat = await Chat.findById(chatId).populate("user");
+      currentChatId = currentChat._id.toString();
+      socket.join(currentChatId);
+      socket.emit("loadChat", currentChat);
+    });
+    socket.on("leaveChat", (id) => {
+      // console.log("before", socket.rooms);
+      socket.leave(id);
+      // console.log("leave chat");
+      // console.log("after", socket.rooms);
     });
 
     socket.on("chatMessage", async ({ text, sender }) => {
-      if (session.currentChat) {
-        session.currentChat.messages.push({ text, sender });
-        await session.currentChat.save();
+      if (currentChat) {
+        currentChat.messages.push({ text, sender });
+        await currentChat.save();
       } else {
         socket.emit("warning", "refresh");
       }
 
-      // io.emit("chatInfo", session);
+      // io.emit("chatInfo", socket.rooms);
 
-      io.to(session.currentChat._id).emit("message", {
+      io.to(currentChatId).emit("message", {
         text: text,
         sender: sender,
         time: new Date().toLocaleString("en-US", {

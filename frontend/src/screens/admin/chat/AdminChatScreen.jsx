@@ -49,11 +49,11 @@ const AdminChatScreen = () => {
       setCurrentChat(data);
       setMessages(data.messages);
       setLoadingChat(false);
-      console.log(data);
     });
-    socket.on("message", (newMsg) =>
-      setMessages((state) => [...state, newMsg])
-    );
+    socket.on("message", (newMsg) => {
+      setMessages((state) => [...state, newMsg]);
+    });
+    socket.on("chatInfo", (info) => console.log(info));
     return () => {
       socket.disconnect();
     };
@@ -61,6 +61,7 @@ const AdminChatScreen = () => {
 
   const loadChatHandler = (id) => {
     setLoadingChat(true);
+    socket.emit("leaveChat", currentChat._id);
     socket.emit("chat", id);
   };
 
