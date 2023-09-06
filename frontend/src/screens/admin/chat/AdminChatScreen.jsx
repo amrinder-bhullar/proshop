@@ -72,6 +72,7 @@ const AdminChatScreen = () => {
     };
 
     socket.emit("chatMessage", message);
+    socket.emit("isAdmin", userInfo._id);
     setText("");
   };
   return (
@@ -92,8 +93,10 @@ const AdminChatScreen = () => {
                 <Conversation
                   key={chat._id}
                   name={chat.user.name}
-                  lastSenderName="Lilly"
-                  info={chat.title}
+                  lastSenderName={
+                    chat.messages[chat.messages.length - 1].sender.name
+                  }
+                  info={chat.messages[chat.messages.length - 1].text}
                   onClick={() => loadChatHandler(chat._id)}
                   active={chat._id === currentChat._id}
                 >

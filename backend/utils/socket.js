@@ -15,7 +15,17 @@ const runSocketIO = (server) => {
     socket.on("isAdmin", async (userID) => {
       const user = await User.findById(userID);
       if (user.isAdmin) {
-        const allChats = await Chat.find({}).populate("user");
+        const allChats = await Chat.find({})
+          .sort({ updatedAt: "desc" })
+          .populate("user")
+          .populate({
+            path: "messages",
+            populate: {
+              path: "sender",
+              model: "User",
+              select: "name",
+            },
+          });
         socket.emit("chats", allChats);
       }
     });
